@@ -125,15 +125,17 @@ const listener = () => {
 			popupCall.style.display = 'none';
 		}
 
-		//accordion
-		const accordionItems = document.querySelectorAll('#accordion .panel-default');
+        //accordion
+        
+		const accordionItems = document.querySelectorAll('#accordion-two .panel-default');
 		accordionItems.forEach(item => {
-			const collapseItems = document.querySelectorAll('#accordion .panel-collapse'),
+			const collapseItems = document.querySelectorAll('#accordion-two .panel-collapse'),
 				collapseItem = item.querySelector('.panel-collapse');
 			// const
 			if (target.closest('.panel-default') === item) {
+                console.log('hello')
 				collapseItems.forEach(item => item.classList.remove('in'));
-				collapseItem.classList.add('in')
+				collapseItem.classList.add('in');
 			}
 		});
 	});
