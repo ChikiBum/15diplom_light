@@ -126,18 +126,19 @@ const listener = () => {
 		}
 
         //accordion
-        
-		const accordionItems = document.querySelectorAll('#accordion-two .panel-default');
-		accordionItems.forEach(item => {
-			const collapseItems = document.querySelectorAll('#accordion-two .panel-collapse'),
-				collapseItem = item.querySelector('.panel-collapse');
-			// const
-			if (target.closest('.panel-default') === item) {
-                console.log('hello')
-				collapseItems.forEach(item => item.classList.remove('in'));
-				collapseItem.classList.add('in');
-			}
-		});
+        const panelGroup = document.querySelectorAll('.panel-group');
+        panelGroup.forEach(elem => {
+            const accordionItems = document.querySelectorAll(`#${elem.id} .panel-default`);
+
+            accordionItems.forEach(item => {
+                const collapseItems = document.querySelectorAll(`#${elem.id} .panel-collapse`),
+                    collapseItem = item.querySelector('.panel-collapse');
+                if (target.closest('.panel-default') === item) {
+                    collapseItems.forEach(item => item.classList.remove('in'));
+                    collapseItem.classList.add('in');
+                }
+            });
+        });
 	});
 
 	//message for validate form NAME
