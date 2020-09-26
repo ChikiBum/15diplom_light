@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use strict';
-const totalObj = {};
+
 
 const sendForm = () => {
 
@@ -13,12 +13,10 @@ const sendForm = () => {
 	const statusMassage = document.createElement('div');
 	statusMassage.style.csstext = 'font-size: 2rem; ';
 	statusMassage.classList.add('status-massage');
-	
+
 
 	forms.forEach((elem) => {
-		
 		elem.addEventListener('submit', (event) => {
-			
 			event.preventDefault();
 			const target = event.target,
 				form = target.closest('form');
@@ -32,11 +30,6 @@ const sendForm = () => {
 			const formData = new FormData(form);
 
 			let body = {};
-					
-			for (const key in totalObj) {
-					body[key] = totalObj[key];
-			}
-				
 
 			// for (let val of formData.entries()){
 			//     body[val[0]] = val[1];
@@ -157,7 +150,7 @@ validateForm();
 
 const accordion = (target) => {
 	const panelGroup = document.querySelectorAll('.panel-group');
-	
+
 	panelGroup.forEach(elem => {
 		const accordionItems = document.querySelectorAll(`#${elem.id} .panel-default`);
 
@@ -172,6 +165,7 @@ const accordion = (target) => {
 				collapseItem.classList.add('in');
 			}  else if (target.closest('.panel-default') === item && target.closest('#next-step')) {
 				collapseItems.forEach(item => item.classList.remove('in'));
+				console.log(accordionItems[i+1]);
 				accordionItems[i+1].querySelector('.panel-collapse').classList.add('in');
 			}
 		});
@@ -179,8 +173,7 @@ const accordion = (target) => {
 };
 
 //caclulator Checkbox
-const onoffswitchCheckbox = (target, event) => {
-	
+const onoffswitchCheckbox = (target) => {
 	const onoffswitchCheckbox = document.querySelectorAll('.onoffswitch-checkbox'),
 		selectBoxWrapper = document.querySelector('.select-box__wrapper'),
 		myonoffSwitch = document.getElementById('myonoffswitch'),
@@ -188,6 +181,7 @@ const onoffswitchCheckbox = (target, event) => {
 		targetClosest = target.closest('.onoffswitch-label');
 
 	onoffswitchCheckbox.forEach(elem => {
+
 		if (targetClosest && targetClosest.getAttribute('for') === elem.id) {
 
 			elem.checked = !elem.checked;
@@ -209,7 +203,8 @@ const calculate = () => {
 		myonoffswitch = document.getElementById('myonoffswitch'),
 		myonoffswitchTwo = document.getElementById('myonoffswitch-two'),
 		calcSelescts = document.querySelectorAll('select'),
-		distance = document.getElementById('distance');
+		distance = document.getElementById('distance'),
+		totalObj = {};
 	let totalSum = 0;
 
 	myonoffswitch.checked ? totalObj.camersPrice1 = 10000 : (totalObj.camersPrice1 = 10000, totalObj.camersPrice2 = 5000);
@@ -235,9 +230,6 @@ const calculate = () => {
 		totalObj.bottom2 = 1.2 ;
 	} else if (myonoffswitchTwo.checked && myonoffswitch.checked) {
 		totalObj.bottom1 = 1.1 ;
-	} else if (!myonoffswitchTwo.checked) {
-		totalObj.bottom1 = 1 ;
-		totalObj.bottom2 = 1 ;
 	}
 
 	totalSum = totalObj.camersPrice1 * totalObj.metersFirst * totalObj.quantityFirst ;
@@ -252,114 +244,34 @@ const calculate = () => {
 		}
 	}
 
-	totalObj.calcResult = totalSum;
-
 	calcResult.value = totalSum;
 };
 
 const listener = () => {
 
-	const panelGroup = document.querySelectorAll('.panel-group'),
-		aCallBtn = document.querySelectorAll('a.call-btn'),
-		buttonCallBtn = document.querySelector('button.call-btn'),
-		popupCall = document.querySelector('.popup-call'),
-		popupDiscount = document.querySelector('.popup-discount'),
-		popupClose = document.querySelectorAll('.popup-close'),
-		addSentenceBtn = document.querySelector('.add-sentence-btn'),
-		discountBtns  = document.querySelectorAll('.discount-btn'),
-		checkBtn = document.querySelector('.check-btn'),
-		popupCheck = document.querySelector('.popup-check'),
-		consultationBtn = document.querySelector('.consultation-btn'),
-		popupConsultation = document.querySelector('.popup-consultation'),
-		userQuest = document.querySelector('input[name=user_quest]');
+	document.addEventListener('click', (event) => {
+		event.preventDefault();
 
-	panelGroup.forEach(elem => {	
-		elem.addEventListener('click', (event) => {
-			event.preventDefault();
-			// event.stopPropagation()
-			
-			const target = event.target;
+		const target = event.target,
+			popupCall = document.querySelector('.popup-call');
 
-			//accordion
-			accordion(target);
-
-			//onoffswitch-checkbox
-			onoffswitchCheckbox(target, event);
-
-			//onoffswitch-checkbox
-			calculate(target);
-		});
-	});
-
-	aCallBtn.forEach(elem => {	
-		elem.addEventListener('click', (event) => {
-			event.preventDefault();
+		if (target.classList.contains('call-btn') && target.tagName.toLowerCase() === 'a') {
 			popupCall.style.display = 'block';
-	
-		});
-	});
-
-	popupClose.forEach(element => {
-		element.addEventListener('click', (event) =>{
-			const target = event.target;
-			event.preventDefault();
-			
-			if (target.closest('.popup-call'))
-			{
-				popupCall.style.display = 'none';
-			} else if (target.closest('.popup-discount')){
-				popupDiscount.style.display = 'none';
-			
-				for (const key in totalObj) {
-					delete totalObj[key];
-				}
-			} else if (target.closest('.popup-check')){
-				popupCheck.style.display = 'none';
-			}
-			else if (target.closest('.popup-consultation')){
-				popupConsultation.style.display = 'none';
-				for (const key in totalObj) {
-					delete totalObj[key];
-				}
-				userQuest.value = '';
-			}
-		});
-	});
-	
-
-	buttonCallBtn.addEventListener('click', (event) =>{
-		event.preventDefault();
-		popupDiscount.style.display = 'block';
-	});
-
-	addSentenceBtn.addEventListener('click', () => {
-		const hidden = document.querySelectorAll('.hidden');
-
-		hidden.forEach(el => {
-			el.classList.remove('hidden');
-		});
-
-		addSentenceBtn.style.display = 'none';
-	});
-
-	discountBtns.forEach(elem => {
-		elem.addEventListener('click', (event) => {
-			event.preventDefault();
-			popupDiscount.style.display = 'block';
-		});
-	});
-
-	checkBtn.addEventListener('click', (event) => {
-		event.preventDefault();
-		popupCheck.style.display = 'block';
-	});
-
-	consultationBtn.addEventListener('click', (event) => {
-		event.preventDefault();
-		if (userQuest.value > 0){
-			totalObj.userQuestion = userQuest.value;
 		}
-		popupConsultation.style.display = 'block';
+
+		if (target.classList.contains('popup-close') || target.classList.contains('popup')) {
+			popupCall.style.display = 'none';
+		}
+
+		//accordion
+		accordion(target);
+
+		//onoffswitch-checkbox
+		onoffswitchCheckbox(target);
+
+		//onoffswitch-checkbox
+		calculate(target);
+
 	});
 };
 
