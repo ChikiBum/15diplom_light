@@ -257,6 +257,18 @@ const calculate = () => {
 	calcResult.value = totalSum;
 };
 
+
+//clear form 
+const clearForm = () => {
+	const forms = document.querySelectorAll('form');
+
+	forms.forEach(elem => {
+		const inputs = elem.querySelectorAll('input');
+
+		inputs.forEach( el => el.value = '');
+	});
+};
+
 const listener = () => {
 
 	const panelGroup = document.querySelectorAll('.panel-group'),
@@ -271,7 +283,8 @@ const listener = () => {
 		popupCheck = document.querySelector('.popup-check'),
 		consultationBtn = document.querySelector('.consultation-btn'),
 		popupConsultation = document.querySelector('.popup-consultation'),
-		userQuest = document.querySelector('input[name=user_quest]');
+		userQuest = document.querySelector('input[name=user_quest]'),
+		popup = document.querySelectorAll('.popup');
 
 	panelGroup.forEach(elem => {	
 		elem.addEventListener('click', (event) => {
@@ -299,6 +312,17 @@ const listener = () => {
 		});
 	});
 
+	popup.forEach(elem => {
+		elem.addEventListener('click', (event) => {
+			const target = event.target;
+			if (target.classList.contains('popup')){
+				console.log(target)
+				target.style.display = 'none';
+			}
+		});
+	});
+
+
 	popupClose.forEach(element => {
 		element.addEventListener('click', (event) =>{
 			const target = event.target;
@@ -323,6 +347,7 @@ const listener = () => {
 				}
 				userQuest.value = '';
 			}
+			clearForm();
 		});
 	});
 	
@@ -333,12 +358,14 @@ const listener = () => {
 	});
 
 	addSentenceBtn.addEventListener('click', () => {
-		const hidden = document.querySelectorAll('.hidden');
+		const hidden = document.querySelectorAll('.hidden'),
+			visibleSmBlock = document.querySelector('.visible-sm-block');
 
 		hidden.forEach(el => {
 			el.classList.remove('hidden');
 		});
 
+		visibleSmBlock.classList.remove('visible-sm-block');
 		addSentenceBtn.style.display = 'none';
 	});
 
