@@ -37,6 +37,15 @@ const sendForm = () => {
 					body[key] = totalObj[key];
 			}
 				
+			const isEmpty = (obj) => {
+				for(var key in obj)
+				{
+					return false;
+				}
+				return true;
+			};
+
+			const calcIsEmpty = isEmpty(body);
 
 			// for (let val of formData.entries()){
 			//     body[val[0]] = val[1];
@@ -49,10 +58,13 @@ const sendForm = () => {
 			postData(body)
 				.then((response) => {
 					if (response.status !== 200) {
-						throw new Error('status network not 200')
+						throw new Error('status network not 200');
 					}
 					statusMassage.setAttribute("style","height: auto;");
 					statusMassage.textContent = successMessage;
+					if (!calcIsEmpty){
+						clearForm(calcIsEmpty)
+					}
 				})
 				.catch((error) => {
 					statusMassage.setAttribute("style","height: auto;");
@@ -84,6 +96,7 @@ sendForm();
 const validateForm = () => {
 	const phoneUser = document.querySelectorAll('.phone-user'),
 		username = document.querySelectorAll('input[name=user_name]'),
+		distance = document.getElementById('distance'),
 		head = document.querySelector('head');
 
 	head.insertAdjacentHTML('beforeend',
@@ -100,7 +113,8 @@ const validateForm = () => {
             #input-validate {
                 color:  red;
                 font-size:  1rem;
-                margin: 0
+				margin: 0;
+				text-align: center 
             }
          </style>`
 	);
@@ -113,11 +127,14 @@ const validateForm = () => {
 		elem.pattern = '^[А-Яа-яЁё\s]+$';
 	});
 
+	// distance.pattern = '([0-5]{0,1})([0-9]{0,1})([0-9]{0,1})';
+
+
 	//message for validate form NAME
 	username.forEach(element => {
 		const div = document.createElement('div'),
 			wrongText = 'Допустима ТОЛЬКО кириллица!';
-		div.id = 'input-validate';
+			div.id = 'input-validate';
 		element.insertAdjacentElement('beforebegin', div);
 
 		element.addEventListener('input', () =>{
@@ -148,6 +165,22 @@ const validateForm = () => {
 			}
 		});
 	});
+
+	const div = document.createElement('div'),
+		wrongText = 'Только число от 1 до 499!';
+		div.id = 'input-validate';
+		distance.insertAdjacentElement('beforebegin', div);
+
+	distance.addEventListener('input', () =>{
+		if (!distance.checkValidity()) {
+			distance.setAttribute('style', 'margin-top: 0')
+			div.textContent = wrongText;
+		} else {
+			distance.removeAttribute('style');
+			div.textContent = '';
+		}
+	});
+	
 
 };
 
@@ -251,7 +284,12 @@ const calculate = () => {
 			totalSum *= totalObj.bottom2;
 		}
 	}
+	
+	if (distance.value > 0){
+		totalObj.distance = +distance.value;
+	}
 
+	totalSum = Math.floor(totalSum * 100) / 100;
 	totalObj.calcResult = totalSum;
 
 	calcResult.value = totalSum;
@@ -259,14 +297,26 @@ const calculate = () => {
 
 
 //clear form 
-const clearForm = () => {
-	const forms = document.querySelectorAll('form');
+const clearForm = (calcIsEmpty) => {
+	const forms = document.querySelectorAll('form'),
+		calcResult = document.getElementById('calc-result'),
+		myonoffswitch = document.getElementById('myonoffswitch'),
+		myonoffswitchTwo = document.getElementById('myonoffswitch-two'),
+		calcSelescts = document.querySelectorAll('select'),
+		distance = document.getElementById('distance');;
 
 	forms.forEach(elem => {
 		const inputs = elem.querySelectorAll('input');
 
 		inputs.forEach( el => el.value = '');
 	});
+	if (!calcIsEmpty){
+		calcResult.value = '';
+		myonoffswitch.checked = true;
+		myonoffswitchTwo.checked = true;
+		calcSelescts.forEach(elem => elem.selectedIndex  = 0);
+		distance.value = '';
+	}
 };
 
 const listener = () => {
@@ -316,7 +366,6 @@ const listener = () => {
 		elem.addEventListener('click', (event) => {
 			const target = event.target;
 			if (target.classList.contains('popup')){
-				console.log(target)
 				target.style.display = 'none';
 			}
 		});
