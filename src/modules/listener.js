@@ -1,4 +1,3 @@
-
 import clearForm from './clearForm.js';
 import onoffswitchCheckbox  from './onoffswitchCheckbox.js';
 import accordion  from './accordion.js';
@@ -37,13 +36,20 @@ const listener = () => {
 				return true;
 			};
 	
-			const calcIsEmpty = isEmpty(totalObj);
+			let calcIsEmpty = isEmpty(totalObj);
 	
 			if (!event.target.closest('.popup-discount') && !calcIsEmpty){
 				for (const key in totalObj) {
-					delete totalObj[key];
+					//#director-form'popup-consultation
+					if ((event.target.closest('.director-form') || event.target.closest('.popup-consultation')) && key === 'userQuestion'){
+						calcIsEmpty = true;
+					} else {
+						delete totalObj[key];
+					}
 				}
+				if (!event.target.closest('.popup-consultation')){
 				clearForm(calcIsEmpty);
+			}
 			}
 		});
 	});
