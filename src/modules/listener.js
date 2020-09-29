@@ -152,7 +152,7 @@ const listener = () => {
 
 	consultationBtn.addEventListener('click', (event) => {
 		event.preventDefault();
-		if (userQuest.value > 0){
+		if (userQuest.value.length > 0){
 			totalObj.userQuestion = userQuest.value;
 		}
 		popupConsultation.style.display = 'block';
